@@ -1,5 +1,5 @@
 #include <iostream>
-using naemspace std;
+using namespace std;
 
 int main()
 {
