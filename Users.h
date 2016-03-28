@@ -81,33 +81,66 @@ class Student : public User
 {
 public:
 	Student() { }
-	Student(string id, string name, string username, string password);
 	~Student() { }
+
+	void setID(string id);
+	void setName(string name);
+	void setUsername(string username);
+	void setPassword(string password);
 };
 
-Student::Student(string id, string name, string username, string password)
+void Student::setID(string id)
 {
-	setID(id);
-	setName(name);
-	setUsername(username);
-	setPassword(password);
+	/* Students cannot modify methods */
+	cout << '\n' << "Access Denied: Student does not have permission to modify methods";
+}
+void Student::setName(string name)
+{
+	/* Students cannot modify methods */
+	cout << '\n' << "Access Denied: Student does not have permission to modify methods";
+}
+void Student::setUsername(string username)
+{
+	/* Students cannot modify methods */
+	cout << '\n' << "Access Denied: Student does not have permission to modify methods";
+}
+void Student::setPassword(string password)
+{
+	/* Students cannot modify methods */
+	cout << '\n' << "Access Denied: Student does not have permission to modify methods";
 }
 
 class Faculty : public User
 {
 public:
 	Faculty() { }
-	Faculty(string id, string name, string username, string password);
 	~Faculty() { }
 
+	void setID(string id);
+	void setName(string name);
+	void setUsername(string username);
+	void setPassword(string password);
 };
 
-Faculty::Faculty(string id, string name, string username, string password)
+void Faculty::setID(string id)
 {
-	setID(id);
-	setName(name);
-	setUsername(username);
-	setPassword(password);
+	/* Faculty cannot modify methods */
+	cout << '\n' << "Access Denied: Faculty does not have permission to modify methods";
+}
+void Faculty::setName(string name)
+{
+	/* Faculty cannot modify methods */
+	cout << '\n' << "Access Denied: Faculty does not have permission to modify methods";
+}
+void Faculty::setUsername(string username)
+{
+	/* Faculty cannot modify methods */
+	cout << '\n' << "Access Denied: Faculty does not have permission to modify methods";
+}
+void Faculty::setPassword(string password)
+{
+	/* Faculty cannot modify methods */
+	cout << '\n' << "Access Denied: Faculty does not have permission to modify methods";
 }
 
 class Admin : public User
@@ -138,33 +171,37 @@ Admin::Admin(string id, string name, string username, string password)
 
 void Admin::displayUserData(User* pUser)
 {
-	cout << '\n' << "User's ID:          " << pUser->getID()
-		<< '\n' << "User's Real Name:   " << pUser->getName()
-		<< '\n' << "User's Username:    " << pUser->getUsername()
-		<< '\n' << "User's Password:    " << pUser->getPassword();
+	Admin admin_access(pUser->getID(), pUser->getName(), pUser->getUsername(), pUser->getPassword());
+
+	cout << '\n' << "User's ID:          " << admin_access.getID()
+		<< '\n' << "User's Real Name:   " << admin_access.getName()
+		<< '\n' << "User's Username:    " << admin_access.getUsername()
+		<< '\n' << "User's Password:    " << admin_access.getPassword();
 }
 
 void Admin::createUser(User* pUser, string id, string name, string username, string password)
 {
-	changeUserID(pUser, id);
-	changeUserName(pUser, name);
-	changeUserUsername(pUser, username);
-	changeUserPassword(pUser, password);
+	User newUser(id, name, username, password);
+	*pUser = newUser;
 }
 
 void Admin::changeUserID(User* pUser, string id)
 {
-	pUser->setID(id);
+	User newUser(id, pUser->getName(), pUser->getUsername(), pUser->getPassword());
+	*pUser = newUser;
 }
 void Admin::changeUserName(User* pUser, string name)
 {
-	pUser->setName(name);
+	User newUser(pUser->getID(), name, pUser->getUsername(), pUser->getPassword());
+	*pUser = newUser;
 }
 void Admin::changeUserUsername(User* pUser, string username)
 {
-	pUser->setUsername(username);
+	User newUser(pUser->getID(), pUser->getName(), username, pUser->getPassword());
+	*pUser = newUser;
 }
 void Admin::changeUserPassword(User* pUser, string password)
 {
-	pUser->setPassword(password);
+	User newUser(pUser->getID(), pUser->getName(), pUser->getUsername(), password);
+	*pUser = newUser;
 }
