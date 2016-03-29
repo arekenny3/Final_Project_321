@@ -125,22 +125,22 @@ public:
 void Faculty::setID(string id)
 {
 	/* Faculty cannot modify methods */
-	cout << '\n' << "Access Denied: Faculty does not have permission to modify methods";
+	cout << '\n' << "Access Denied: Faculty do not have permission to modify methods";
 }
 void Faculty::setName(string name)
 {
 	/* Faculty cannot modify methods */
-	cout << '\n' << "Access Denied: Faculty does not have permission to modify methods";
+	cout << '\n' << "Access Denied: Faculty do not have permission to modify methods";
 }
 void Faculty::setUsername(string username)
 {
 	/* Faculty cannot modify methods */
-	cout << '\n' << "Access Denied: Faculty does not have permission to modify methods";
+	cout << '\n' << "Access Denied: Faculty do not have permission to modify methods";
 }
 void Faculty::setPassword(string password)
 {
 	/* Faculty cannot modify methods */
-	cout << '\n' << "Access Denied: Faculty does not have permission to modify methods";
+	cout << '\n' << "Access Denied: Faculty do not have permission to modify methods";
 }
 
 class Admin : public User
