@@ -127,8 +127,6 @@ void UseAndPass()
 	getline(cin, password);
 	cin>> password;
 
-	cout << "your password is " << password;
-
 	
 
 }
