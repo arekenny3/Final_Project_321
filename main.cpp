@@ -1,6 +1,11 @@
 #include <iostream>
 #include <string> // add an IFNDEF section to this file
 #include "Users.h"
+#include <windows.h>
+
+//Prortyped functions
+void welcome();
+void UseAndPass();
 
 using namespace std;
 
@@ -10,7 +15,8 @@ int main()
 {
 	// admin_tutorial(); // uncomment if you would like to see how the admin class works. Look at the code as well
 
-
+	welcome();
+	UseAndPass();
 
 	cin.get(); // pause screen
 
@@ -96,5 +102,33 @@ void admin_tutorial()
 	cout << '\n';
 
 	firstStudent.setID("Admin");
+
+}
+
+void welcome()
+{
+	cout << "\n\n\t\tWelcome to D2S (Desire To Schedule)";
+}
+void UseAndPass()
+{
+	string username;
+	string password ;
+
+
+	cout << "\n\n\tEnter a username: ";
+	cin >> username;
+	cout << "\n\tEnter your password: ";
+
+
+	HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
+	DWORD mode = 0;
+	GetConsoleMode(hStdin, &mode);
+	SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT));
+	getline(cin, password);
+	cin>> password;
+
+	cout << "your password is " << password;
+
+	
 
 }
