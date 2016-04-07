@@ -1,15 +1,14 @@
+#ifndef USERS
+#define USERS
 #include <iostream>
-#include <string> //           add an IFNDEF section to this file
+#include <string>
 
 using namespace std;
-
 
 /*
 
 Separate these three classes into three separate files. (eventually)
 */
-
-
 
 class User
 {
@@ -205,3 +204,4 @@ void Admin::changeUserPassword(User* pUser, string password)
 	User newUser(pUser->getID(), pUser->getName(), pUser->getUsername(), password);
 	*pUser = newUser;
 }
+#endif

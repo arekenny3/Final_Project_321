@@ -1,9 +1,9 @@
 #include <iostream>
-#include <string> // add an IFNDEF section to this file
+#include <string>
 #include "Users.h"
 #include <windows.h>
 
-//Prortyped functions
+//Protoyped functions
 void welcome();
 void UseAndPass();
 
@@ -23,6 +23,7 @@ int main()
 	return 0;
 }
 
+// Administration tutorial here
 void admin_tutorial()
 {
 	/*
@@ -39,8 +40,6 @@ void admin_tutorial()
 	/*
 	the administrator can change other users data
 	*/
-
-
 
 	administrator.changeUserID(&administrator, "A00005");
 	administrator.changeUserName(&administrator, "Kane Rodriguez");
@@ -109,24 +108,20 @@ void welcome()
 {
 	cout << "\n\n\t\tWelcome to D2S (Desire To Schedule)";
 }
+
 void UseAndPass()
 {
 	string username;
 	string password ;
 
-
 	cout << "\n\n\tEnter a username: ";
 	cin >> username;
 	cout << "\n\tEnter your password: ";
-
 
 	HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
 	DWORD mode = 0;
 	GetConsoleMode(hStdin, &mode);
 	SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT));
 	getline(cin, password);
-	cin>> password;
-
-	
-
+	cin >> password;
 }
