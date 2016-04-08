@@ -5,13 +5,18 @@
 
 using namespace std;
 
+void permissionError()
+{
+	cout << "\nUser doesn't have permission to do this.\n";
+}
+
 /*
 Separate these three classes into three separate files. (eventually)
 */
 
 class User
 {
-private:
+protected:
 	string itsID;
 	string itsName; // could separate to -- itsFirstname and itsLastname
 	string itsUsername;
@@ -26,10 +31,11 @@ public:
 	string getUsername() { return itsUsername; } 
 	string getPassword() { return itsPassword; }
 
-	virtual void setID(string id) { itsID = id; } // override these for student and faculty to show an error message
-	virtual void setName(string name) { itsName = name; } // .......only admin should have access!
-	virtual void setUsername(string username) { itsUsername = username; }
-	virtual void setPassword(string password) { itsPassword = password; }
+	// Only Admins can do this stuff.
+	void setID() { permissionError(); }
+	void setName() { permissionError(); }
+	void setUsername() { permissionError(); }
+	void setPassword() { permissionError(); }
 
 	virtual void displayUserData(User*);
 
@@ -80,66 +86,15 @@ class Student : public User
 public:
 	Student() { }
 	~Student() { }
-
-	void setID(string id);
-	void setName(string name);
-	void setUsername(string username);
-	void setPassword(string password);
 };
 
-void Student::setID(string id)
-{
-	/* Students cannot modify methods */
-	cout << '\n' << "Access Denied: Student does not have permission to modify methods";
-}
-void Student::setName(string name)
-{
-	/* Students cannot modify methods */
-	cout << '\n' << "Access Denied: Student does not have permission to modify methods";
-}
-void Student::setUsername(string username)
-{
-	/* Students cannot modify methods */
-	cout << '\n' << "Access Denied: Student does not have permission to modify methods";
-}
-void Student::setPassword(string password)
-{
-	/* Students cannot modify methods */
-	cout << '\n' << "Access Denied: Student does not have permission to modify methods";
-}
 
 class Faculty : public User
 {
 public:
 	Faculty() { }
 	~Faculty() { }
-
-	void setID(string id);
-	void setName(string name);
-	void setUsername(string username);
-	void setPassword(string password);
 };
-
-void Faculty::setID(string id)
-{
-	/* Faculty cannot modify methods */
-	cout << '\n' << "Access Denied: Faculty do not have permission to modify methods";
-}
-void Faculty::setName(string name)
-{
-	/* Faculty cannot modify methods */
-	cout << '\n' << "Access Denied: Faculty do not have permission to modify methods";
-}
-void Faculty::setUsername(string username)
-{
-	/* Faculty cannot modify methods */
-	cout << '\n' << "Access Denied: Faculty do not have permission to modify methods";
-}
-void Faculty::setPassword(string password)
-{
-	/* Faculty cannot modify methods */
-	cout << '\n' << "Access Denied: Faculty do not have permission to modify methods";
-}
 
 class Admin : public User
 {
@@ -156,6 +111,10 @@ public:
 	void changeUserName(User*, string); // change a users Name
 	void changeUserUsername(User*, string); // change a users Username
 	void changeUserPassword(User*, string); // change a users Password
+	void setID(string id) {itsID = id;}
+	void setName(string name) {itsName = name;}
+	void setUsername(string username) {itsUsername = username;}
+	void setPassword(string password) {itsPassword = password;}
 
 };
 
