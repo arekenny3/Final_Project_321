@@ -100,7 +100,7 @@ void admin_tutorial()
 
 	cout << '\n';
 
-	firstStudent.setID("Admin");
+	firstStudent.setID();
 
 }
 
