@@ -89,14 +89,14 @@ public:
 };
 
 
-class Faculty : public User
+class Faculty : public Student
 {
 public:
 	Faculty() { }
 	~Faculty() { }
 };
 
-class Admin : public User
+class Admin : public Faculty
 {
 public:
 	Admin() { }
