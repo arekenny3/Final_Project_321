@@ -4,11 +4,22 @@
 #include "Users.h"
 #include "tutorial.h"
 
+
+/*  
+
+		In order to go forward with this project, a database has to be made to contain the information of users. 
+
+*/
+
 //Protoyped functions
 void welcome();
-bool login(); // both login and loginVerification might not be 'safe' and login is now platform dependent to windows.. consider changing in future
-bool loginVerification(string,string);
-
+User* getUser();
+User* login(); // both login and loginVerification might not be 'safe' and login is now platform dependent to windows.. consider changing in future
+User* loginVerification(string, string);
+void loginError()
+{
+	cout << "\n\n\t--Error-- Incorrect Username or Password";
+}
 using namespace std;
 
 int main()
@@ -16,11 +27,12 @@ int main()
 	//admin_tutorial(); // uncomment if you would like to see how the admin class works. Look at the code as well
 
 	welcome();
-	while (!login()) // was login successful?
-	{
-		cout << "\n\n\t--Error-- Incorrect Username or Password"; /* perhaps make separate function for error handling in main 
-																  (NOTE: maybe implement try-catch later on */
-	}
+
+	User* newUser = new User;
+
+	newUser = getUser(); // go through the login and verification process. SHOULD NOT MOVE PAST THIS POINT IF THEY CAN'T LOGIN
+
+
 
 	cin.clear();
 	cin.ignore();
@@ -34,7 +46,19 @@ void welcome()
 	cout << "\n\n\t\tWelcome to D2S (Desire To Schedule)";
 }
 
-bool login()
+User* getUser()
+{
+	User* newUser = NULL;
+
+	while ( (newUser = login()) == NULL )
+	{
+		loginError();
+	}
+
+	return newUser;
+}
+
+User* login()
 {
 	string username;
 	string password;
@@ -64,11 +88,21 @@ bool login()
 	return loginVerification(username, password);
 }
 
-bool loginVerification(string username, string password)
+User* loginVerification(string username, string password)
 {
 	// implement in future. For now: Return true
 	cout << "\n\n\tYour Username: " << username
 		<< "\n\n\tYour Password: " << password; // NOTE: For testing puposes only, delete later
 
-	return true;
+	/*
+		
+	search database for the user matching this username and password
+
+		If found and password matches, RETURN THE USER THAT WAS FOUND;
+
+		ELSE If problems found RETURN NULL;
+
+	*/
+
+	return NULL;
 }
