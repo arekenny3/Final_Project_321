@@ -21,9 +21,14 @@ jobpost:
 
 */
 
-class jobpost
+class Jobpost
 {
-
-
-
+  string job_title;
+  string job_desc;
+  string post_time;
+  string post_time;
+  string creator;
 };
+
+
+
