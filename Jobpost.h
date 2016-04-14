@@ -24,10 +24,11 @@ jobpost:
 class Jobpost
 {
   private:
+    int jobNumber
     string jobTitle;
     string jobDesc;
     string postTime;
-    string postTime;
+    string hireTime;
     string creator;
 };
 
