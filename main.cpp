@@ -1,10 +1,11 @@
 #include <iostream>
 #include <string>
+#include <fstream> // needed for the database
 #include <windows.h>
 #include "Users.h"
 #include "tutorial.h"
 
-
+void test();
 /*  
 
 		In order to go forward with this project, a database has to be made to contain the information of users. 
@@ -22,17 +23,24 @@ void errorWarning(char* s)
 }
 using namespace std;
 
+void d2sDatabaseSystem();
+void databaseWelcomeMessage();
+int databaseOptions();
+void databaseWrite();
+void databaseRead();
+void databaseSearch();
+
 int main()
 {
 	//admin_tutorial(); // uncomment if you would like to see how the admin class works. Look at the code as well
 
-	welcome();
+	//welcome();
 
-	User* newUser = new User;
+	//User* newUser = new User;
 
-	newUser = getUser(); // go through the login and verification process. SHOULD NOT MOVE PAST THIS POINT IF THEY CAN'T LOGIN
+	//newUser = getUser(); // go through the login and verification process. SHOULD NOT MOVE PAST THIS POINT IF THEY CAN'T LOGIN
 
-
+	d2sDatabaseSystem();
 
 	cin.clear();
 	cin.ignore();
@@ -41,68 +49,66 @@ int main()
 	return 0;
 }
 
-void welcome()
+void d2sDatabaseSystem()
 {
-	cout << "\n\n\t\tWelcome to D2S (Desire To Schedule)";
-}
-
-User* getUser()
-{
-	User* newUser = NULL;
-
-	while ( (newUser = login()) == NULL )
-	{
-		errorWarning("Wrong Username or Password");
-	}
-
-	return newUser;
-}
-
-User* login()
-{
-	string username;
-	string password;
-
-	cout << "\n\n\tEnter a username: ";
-	cin >> username;
-	cout << "\n\tEnter your password: ";
-
-	HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
-	DWORD mode = 0;
-	GetConsoleMode(hStdin, &mode);
-	SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT));
-	getline(cin, password);
-	cin >> password;
-
-
-	/* Must turn screen ouput back on for user input */
-	SetConsoleMode(hStdin, mode |= ENABLE_ECHO_INPUT);
-
-
-
 	/* 
-		NOTE: This code is dependent on WINDOWS. Consider changing in future OR find a
-			 way to only include this on windows, and have separate methods for implementing on
-			 Mac, Linux, etc. 
+			Please note that this is TEMPORARY
 	*/
-	return loginVerification(username, password);
+	bool exit = false;
+	int choice = 0;
+
+	databaseWelcomeMessage();
+
+	while (!exit)
+	{
+		while (!(choice = databaseOptions()) || (choice > 4 || choice < 1) )
+		{
+			errorWarning("That Was Not One of the Options");
+		}
+		switch (choice)
+		{
+		case 1: databaseWrite();
+			break;
+		case 2: // do something
+			break;
+		case 3: // do something
+			break;
+		case 4: exit = true;
+			break;
+		default: // do something
+			break;
+		}
+	}
 }
 
-User* loginVerification(string username, string password)
+void databaseWelcomeMessage()
 {
-	// implement in future. For now: Return true
-	cout << "\n\n\tYour Username: " << username
-		<< "\n\n\tYour Password: " << password; // NOTE: For testing puposes only, delete later
+	cout << "\n\n\t\tWelcome to the D2S Database Management System";
+}
 
-	/*
-		
-	search database for the user matching this username and password
+int databaseOptions()
+{
+	int x = 0;
+	cout << "\n\n\tYour Options Are:"
+		<< "\n\t1. Write to Database"
+		<< "\n\t2. Read from Database"
+		<< "\n\t3. Search Database"
+		<< "\n\t4. Exit"
+		<< "\n\t: ";
 
-		If found and password matches, RETURN THE USER THAT WAS FOUND;
+	scanf_s("%d", &x);
 
-		ELSE If problems found RETURN NULL;
+	getchar(); // THIS IS NOT A GOOD WAY TO GET USER INPUT - Keep in mind that this is temporary
 
-	*/
+	return x;
+}
 
-	return NULL;
+void databaseWrite()
+{
+}
+void databaseRead()
+{
+}
+void databaseSearch()
+{
 }
