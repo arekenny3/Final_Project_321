@@ -54,6 +54,25 @@ public:
 
 	*/
 
+	// Insertion operator
+	friend std::ostream& operator<<(std::ostream& os, const User& getUser)
+	{
+		// write out individual members of s with an end of line between each one
+		os << getUser.itsID << '\n';
+		os << getUser.itsName << '\n';
+		os << getUser.itsUsername << '\n';
+		os << getUser.itsPassword << '\n';
+		return os;
+	}
+
+	// Extraction operator
+	friend std::istream& operator>>(std::istream& is, User& storeUser)
+	{
+		// read in individual members of s
+		is >> storeUser.itsID >> storeUser.itsName >> storeUser.itsUsername >> storeUser.itsPassword;
+		return is;
+	}
+
 };
 
 User::User(string id, string name, string username, string password)
