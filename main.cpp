@@ -5,7 +5,6 @@
 #include "Users.h"
 #include "tutorial.h"
 
-void test();
 /*  
 
 		In order to go forward with this project, a database has to be made to contain the information of users. 
@@ -40,7 +39,27 @@ int main()
 
 	//newUser = getUser(); // go through the login and verification process. SHOULD NOT MOVE PAST THIS POINT IF THEY CAN'T LOGIN
 
-	d2sDatabaseSystem();
+	//d2sDatabaseSystem();
+
+	Admin adm("A12345", "Nick Whetstone", "ratherB_a_wet_stone9696", "my name is nick");
+	Admin adm2;
+	ofstream ofs("saved.txt", ios::out | ios::app);
+
+	ofs << adm; // store the object to file
+	cout << "Object stored\n";
+	ofs.close();
+
+	ifstream ifs("saved.txt", ios::in | ios::app);
+
+	// read the object back in
+	if (ifs >> adm2)
+	{
+		// read was successful therefore s2 is valid
+		cout << adm2 << '\n'; // print s2 to console
+	}
+	cout << "Object read\n";
+
+
 
 	cin.clear();
 	cin.ignore();
