@@ -16,9 +16,9 @@ void welcome();
 User* getUser();
 User* login(); // both login and loginVerification might not be 'safe' and login is now platform dependent to windows.. consider changing in future
 User* loginVerification(string, string);
-void loginError()
+void errorWarning(char* s)
 {
-	cout << "\n\n\t--Error-- Incorrect Username or Password";
+	cout << "\n\n\t--Error-- " << s;
 }
 using namespace std;
 
@@ -52,7 +52,7 @@ User* getUser()
 
 	while ( (newUser = login()) == NULL )
 	{
-		loginError();
+		errorWarning("Wrong Username or Password");
 	}
 
 	return newUser;
