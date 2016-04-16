@@ -2,14 +2,22 @@
 #define USERS
 #include <iostream>
 #include <string>
+#include "tinyxml2.h"
+#pragma warning(disable:4996) // get rid of those nasty warnings
 
 using namespace std;
+using namespace tinyxml2;
 
 void permissionError()
 {
 	cout << "\nUser doesn't have permission to do this.\n";
 }
-
+void errorWarning(char* s)
+{
+	cout << "\n\n\t--Error-- " << s;
+	cin.clear();
+	cin.ignore();
+}
 /*
 Separate these three classes into three separate files. (eventually)
 */
@@ -53,6 +61,23 @@ public:
 	methods
 
 	*/
+
+	// Insertion operator
+	friend ostream& operator<<(std::ostream& os, const User& getUser)
+	{
+		os << getUser.itsID << '\n';
+		os << getUser.itsName << '\n';
+		os << getUser.itsUsername << '\n';
+		os << getUser.itsPassword << '\n';
+		return os;
+	}
+
+	// Extraction operator
+	friend istream& operator>>(std::istream& is, User& storeUser)
+	{
+		is >> storeUser.itsID >> storeUser.itsName >> storeUser.itsUsername >> storeUser.itsPassword;
+		return is;
+	}
 
 };
 
@@ -116,6 +141,7 @@ public:
 	void setUsername(string username) {itsUsername = username;}
 	void setPassword(string password) {itsPassword = password;}
 
+	void storeToDatabase(char*, User*);
 };
 
 Admin::Admin(string id, string name, string username, string password)
@@ -162,4 +188,46 @@ void Admin::changeUserPassword(User* pUser, string password)
 	User newUser(pUser->getID(), pUser->getName(), pUser->getUsername(), password);
 	*pUser = newUser;
 }
+void Admin::storeToDatabase(char * database, User * pUser)
+{
+	tinyxml2::XMLDocument xmlDoc;
+	xmlDoc.LoadFile(database);
+
+	XMLNode * pRoot = xmlDoc.FirstChild();
+
+	if (pRoot == nullptr)
+	{
+		errorWarning("Database Failed To Open"); // Need to have a preinitialized database for this to work (use the xml file I included on github)
+		getchar();
+		exit(1);
+	}
+	if (database == "UserDatabase.xml")
+	{
+		Admin admin_access(pUser->getID(), pUser->getName(), pUser->getUsername(), pUser->getPassword());
+
+		char *xmlID = new char[admin_access.getID().length() + 1];
+		char *xmlName = new char[admin_access.getName().length() + 1];
+		char *xmlUsername = new char[admin_access.getUsername().length() + 1];
+		char *xmlPassword = new char[admin_access.getPassword().length() + 1];
+
+		strcpy(xmlID, admin_access.getID().c_str());
+		strcpy(xmlName, admin_access.getName().c_str());
+		strcpy(xmlUsername, admin_access.getUsername().c_str());
+		strcpy(xmlPassword, admin_access.getPassword().c_str());
+
+		XMLElement * pXmlUser = xmlDoc.NewElement("User");
+		pXmlUser->SetAttribute("id", xmlID);
+		pXmlUser->SetAttribute("name", xmlName);
+		pXmlUser->SetAttribute("username", xmlUsername);
+		pXmlUser->SetAttribute("password", xmlPassword);
+		pRoot->InsertEndChild(pXmlUser);
+
+		xmlDoc.SaveFile("UserDatabase.xml");
+
+		delete xmlID, xmlName, xmlUsername, xmlPassword;
+		xmlID = xmlName = xmlUsername = xmlPassword = 0;
+	}
+	// add options for job listings and exams
+}
+
 #endif
