@@ -22,9 +22,9 @@ int main()
 
 	welcome();
 
-	User* newUser = new User;
-	//newUser = getUser(); // go through the login and verification process. SHOULD NOT MOVE PAST THIS POINT IF THEY CAN'T LOGIN
-
+	User* newUser = new User; // Memory Leak? I made news all the way through.
+	newUser = getUser(); // go through the login and verification process. SHOULD NOT MOVE PAST THIS POINT IF THEY CAN'T LOGIN
+	
 	d2sDatabaseSystem();
 
 	cin.clear();
