@@ -6,12 +6,18 @@
 #pragma warning(disable:4996) // get rid of those nasty warnings
 
 using namespace std;
+using namespace tinyxml2;
 
 void permissionError()
 {
 	cout << "\nUser doesn't have permission to do this.\n";
 }
-
+void errorWarning(char* s)
+{
+	cout << "\n\n\t--Error-- " << s;
+	cin.clear();
+	cin.ignore();
+}
 /*
 Separate these three classes into three separate files. (eventually)
 */
@@ -135,7 +141,7 @@ public:
 	void setUsername(string username) {itsUsername = username;}
 	void setPassword(string password) {itsPassword = password;}
 
-	void storeToUserDatabase(User*);
+	void storeToDatabase(char*, User*);
 };
 
 Admin::Admin(string id, string name, string username, string password)
@@ -182,44 +188,46 @@ void Admin::changeUserPassword(User* pUser, string password)
 	User newUser(pUser->getID(), pUser->getName(), pUser->getUsername(), password);
 	*pUser = newUser;
 }
-void Admin::storeToUserDatabase(User* pUser)
+void Admin::storeToDatabase(char * database, User * pUser)
 {
-	Admin admin_access(pUser->getID(), pUser->getName(), pUser->getUsername(), pUser->getPassword());
+	tinyxml2::XMLDocument xmlDoc;
+	xmlDoc.LoadFile(database);
 
-	char *xmlID = new char[admin_access.getID().length() + 1]; /* NOTE: These must all be deallocated */
-	char *xmlName = new char[admin_access.getName().length() + 1];
-	char *xmlUsername = new char[admin_access.getUsername().length() + 1];
-	char *xmlPassword = new char[admin_access.getPassword().length() + 1];
+	XMLNode * pRoot = xmlDoc.FirstChild();
 
-	strcpy(xmlID, admin_access.getID().c_str());
-	strcpy(xmlName, admin_access.getName().c_str());
-	strcpy(xmlUsername, admin_access.getUsername().c_str());
-	strcpy(xmlPassword, admin_access.getPassword().c_str());
+	if (pRoot == nullptr)
+	{
+		errorWarning("Database Failed To Open"); // Need to have a preinitialized database for this to work (use the xml file I included on github)
+		getchar();
+		exit(1);
+	}
+	if (database == "UserDatabase.xml")
+	{
+		Admin admin_access(pUser->getID(), pUser->getName(), pUser->getUsername(), pUser->getPassword());
 
-	tinyxml2::XMLDocument doc;
-	tinyxml2::XMLElement* userNode = doc.NewElement("User");
-	tinyxml2::XMLElement* idNode = doc.NewElement("id");
-	tinyxml2::XMLElement* nameNode = doc.NewElement("name");
-	tinyxml2::XMLElement* usernameNode = doc.NewElement("username");
-	tinyxml2::XMLElement* passwordNode = doc.NewElement("password");
-	tinyxml2::XMLText* idText = doc.NewText(xmlID);
-	tinyxml2::XMLText* nameText = doc.NewText(xmlName);
-	tinyxml2::XMLText* usernameText = doc.NewText(xmlUsername);
-	tinyxml2::XMLText* passwordText = doc.NewText(xmlPassword);
+		char *xmlID = new char[admin_access.getID().length() + 1];
+		char *xmlName = new char[admin_access.getName().length() + 1];
+		char *xmlUsername = new char[admin_access.getUsername().length() + 1];
+		char *xmlPassword = new char[admin_access.getPassword().length() + 1];
 
-	idNode->InsertFirstChild(idText);
-	nameNode->InsertFirstChild(nameText);
-	usernameNode->InsertFirstChild(usernameText);
-	passwordNode->InsertFirstChild(passwordText);
+		strcpy(xmlID, admin_access.getID().c_str());
+		strcpy(xmlName, admin_access.getName().c_str());
+		strcpy(xmlUsername, admin_access.getUsername().c_str());
+		strcpy(xmlPassword, admin_access.getPassword().c_str());
 
-	userNode->InsertEndChild(idNode);
-	userNode->InsertEndChild(nameNode);
-	userNode->InsertEndChild(usernameNode);
-	userNode->InsertEndChild(passwordNode);
+		XMLElement * pXmlUser = xmlDoc.NewElement("User");
+		pXmlUser->SetAttribute("id", xmlID);
+		pXmlUser->SetAttribute("name", xmlName);
+		pXmlUser->SetAttribute("username", xmlUsername);
+		pXmlUser->SetAttribute("password", xmlPassword);
+		pRoot->InsertEndChild(pXmlUser);
 
-	doc.InsertEndChild(userNode);
+		xmlDoc.SaveFile("UserDatabase.xml");
 
-	doc.SaveFile("userDatabase.dat");
+		delete xmlID, xmlName, xmlUsername, xmlPassword;
+		xmlID = xmlName = xmlUsername = xmlPassword = 0;
+	}
+	// add options for job listings and exams
 }
 
 #endif
