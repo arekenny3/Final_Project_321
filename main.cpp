@@ -5,7 +5,7 @@
 #include "Users.h"
 #include "tutorial.h"
 #include "tinyxml2.h"
-
+#include  "d2sDatabaseSystem.h"
 #pragma warning(disable:4996) // get rid of those nasty warnings
 
 using namespace tinyxml2;
@@ -15,18 +15,7 @@ void welcome();
 User* getUser();
 User* login(); // both login and loginVerification might not be 'safe' and login is now platform dependent to windows.. consider changing in future
 User* loginVerification(string, string);
-void errorWarning(char* s)
-{
-	cout << "\n\n\t--Error-- " << s;
-}
 using namespace std;
-
-void d2sDatabaseSystem();
-void databaseWelcomeMessage();
-int databaseOptions();
-void databaseWrite();
-void databaseRead();
-void databaseSearch();
 
 int main()
 {
@@ -37,7 +26,7 @@ int main()
 
 	d2sDatabaseSystem();
 	//Admin adm("A12345", "Nick Whetstone", "ratherB_a_wet_stone9696", "my name is nick");
-	
+
 	cin.clear();
 	cin.ignore();
 	cin.get();
@@ -45,72 +34,65 @@ int main()
 	return 0;
 }
 
-void d2sDatabaseSystem()
+void welcome()
 {
-	bool exit = false;
-	int choice = 0;
+	cout << "\n\n\t\tWelcome to D2S (Desire To Schedule)";
+}
 
-	databaseWelcomeMessage();
+User* getUser()
+{
+	User* newUser = NULL;
 
-	while (!exit)
+	while ((newUser = login()) == NULL)
 	{
-		while (!(choice = databaseOptions()) || (choice > 4 || choice < 1) )
-		{
-			errorWarning("That Was Not One of the Options");
-		}
-		switch (choice)
-		{
-		case 1: databaseWrite();
-			break;
-		case 2: // do something
-			break;
-		case 3: // do something
-			break;
-		case 4: exit = true;
-			break;
-		default: // do something
-			break;
-		}
+		errorWarning("Incorrect Username or Password");
 	}
+
+	return newUser;
 }
 
-void databaseWelcomeMessage()
+User* login()
 {
-	cout << "\n\n\t\tWelcome to the D2S Database Management System";
+	string username;
+	string password;
+
+	cout << "\n\n\tEnter a username: ";
+	cin >> username;
+	cout << "\n\tEnter your password: ";
+
+	HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
+	DWORD mode = 0;
+	GetConsoleMode(hStdin, &mode);
+	SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT));
+	getline(cin, password);
+	cin >> password;
+
+
+	/* Must turn screen ouput back on for user input */
+	SetConsoleMode(hStdin, mode |= ENABLE_ECHO_INPUT);
+
+
+
+	/*
+	NOTE: This code is dependent on WINDOWS. Consider changing in future OR find a
+	way to only include this on windows, and have separate methods for implementing on
+	Mac, Linux, etc.
+	*/
+	return loginVerification(username, password);
 }
 
-int databaseOptions()
+User* loginVerification(string username, string password)
 {
-	int x = 0;
-	cout << "\n\n\tYour Options Are:"
-		<< "\n\t1. Write to Database"
-		<< "\n\t2. Read from Database"
-		<< "\n\t3. Search Database"
-		<< "\n\t4. Exit"
-		<< "\n\t: ";
+	// implement in future. For now: Return true
+	cout << "\n\n\tYour Username: " << username
+		<< "\n\n\tYour Password: " << password; // NOTE: For testing puposes only, delete later
 
-	scanf_s("%d", &x);
+	/*
 
-	getchar();
+	search database for the user matching this username and password
+	If found and password matches, RETURN THE USER THAT WAS FOUND;
+	ELSE If problems found RETURN NULL;
+	*/
 
-	return x;
-}
-
-void databaseWrite()
-{
-	Admin adm;
-	User *newUser = new User; // make sure to deallocate
-	adm.createUser(newUser,"S12123", "Caleb N.", "youresocool", "i like cats");
-
-	adm.storeToUserDatabase(newUser);
-
-	delete newUser;
-	newUser = 0;
-
-}
-void databaseRead()
-{
-}
-void databaseSearch()
-{
+	return NULL;
 }
