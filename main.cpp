@@ -24,7 +24,9 @@ int main()
 
 	User* newUser = new User; // Memory Leak? I made news all the way through.
 	newUser = getUser(); // go through the login and verification process. SHOULD NOT MOVE PAST THIS POINT IF THEY CAN'T LOGIN
-	
+
+	// this is where calebs menu function will go --- void d2sMainMenu(string type);
+
 	d2sDatabaseSystem();
 
 	cin.clear();
@@ -38,3 +40,24 @@ void welcome()
 {
 	cout << "\n\n\t\tWelcome to D2S (Desire To Schedule)";
 }
+
+/*
+	requirements for the d2sMainMenu function:
+
+	-selectively choose what options to give users, based on their types
+	(HINT: This snippet below will store the usertype into 'type')
+
+				string type = userType(newUser);
+				(could be "student", "faculty, or "admin")
+	
+	-OptionsForAdmin
+	  List Admin Options
+	-OptionsForFaculty
+	  List Faculty Options
+	-OptionsForStudent
+	  List Student Options
+
+	BONUS:
+		make some default options that would be available for anyone (potential future guests)
+	
+	*/
