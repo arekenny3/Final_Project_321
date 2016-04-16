@@ -17,6 +17,7 @@ int selectDatabase();
 void makeUser();
 void readUsers();
 int makeUserMenu();
+User* searchUserDatabase(char *, string);
 
 void d2sDatabaseSystem()
 {
@@ -94,6 +95,57 @@ void databaseWrite()
 		}
 	}
 }
+void databaseRead()
+{
+	bool exit = false;
+	int choice = 0;
+	while (!exit)
+	{
+		while (!(choice = selectDatabase()) || (choice > 4 || choice < 1))
+		{
+			errorWarning("That Was Not One of the Options");
+		}
+		switch (choice)
+		{
+		case 1: readUsers();
+			break;
+		case 2: // createJobListingMenu();
+			break;
+		case 3: // createExamMenu();
+			break;
+		case 4: exit = true;
+			break;
+		default: // do something
+			break;
+		}
+	}
+}
+void databaseSearch()
+{
+	bool exit = false;
+	int choice = 0;
+	while (!exit)
+	{
+		while (!(choice = selectDatabase()) || (choice > 4 || choice < 1))
+		{
+			errorWarning("That Was Not One of the Options");
+		}
+		switch (choice)
+		{
+		case 1: readUsers();
+			break;
+		case 2: // createJobListingMenu();
+			break;
+		case 3: // createExamMenu();
+			break;
+		case 4: exit = true;
+			break;
+		default: // do something
+			break;
+		}
+	}
+}
+
 int selectDatabase()
 {
 	int x = 0;
@@ -110,6 +162,7 @@ int selectDatabase()
 
 	return x;
 }
+
 void makeUser()
 {
 	Admin adm(" ", " ", " ", " ");
@@ -184,9 +237,6 @@ void readUsers()
 		adm.displayUserData(dqUserList.at(count));
 		cout << '\n';
 		++count;
-	//	delete dqUserList.back();
-		//dqUserList.back() = 0;
-	//	dqUserList.pop_back();
 	}
 	count = 0;
 	for (deque<User*>::iterator i = dqUserList.begin(); i != dqUserList.end(); ++i)
@@ -201,46 +251,66 @@ void readUsers()
 	cin.clear();
 	cin.ignore();
 }
-void databaseRead()
+User* searchUserDatabase(char * attribute, string searchItem)
 {
-	Admin adm;
-	bool exit = false;
-	int choice = 0;
-	while (!exit)
-	{
-		while (!(choice = selectDatabase()) || (choice > 4 || choice < 1))
-		{
-			errorWarning("That Was Not One of the Options");
-		}
-		switch (choice)
-		{
-		case 1: readUsers();
-			break;
-		case 2: // createJobListingMenu();
-			break;
-		case 3: // createExamMenu();
-			break;
-		case 4: exit = true;
-			break;
-		default: // do something
-			break;
-		}
-	}
-}
-void databaseSearch()
-{	
+	Admin adm(" ", " ", " ", " ");
+	string id, name, username, password;
 	tinyxml2::XMLDocument xmlDoc;
 	xmlDoc.LoadFile("UserDatabase.xml");
 	XMLNode * pRoot = xmlDoc.FirstChild();
-
 	if (pRoot == nullptr)
 	{
 		errorWarning("Database Failed To Open"); // Need to have a preinitialized database for this to work (use the xml file I included on github)
 		getchar();
 		exit(1);
 	}
+	XMLElement* userElement = xmlDoc.FirstChildElement()->FirstChildElement("User");
 
-	XMLElement* findID = xmlDoc.FirstChildElement()->FirstChildElement("User");
-	string id = findID->Attribute("id");
+	if (!((attribute == "id") || (attribute == "name") || (attribute == "username") || (attribute == "password")))
+	{
+		errorWarning("That Is Not a Searchable Item");
+		return NULL;
+	}
+	
+	for (tinyxml2::XMLElement* child = userElement; child != NULL; child = child->NextSiblingElement())
+	{
+		if (searchItem == child->Attribute(attribute))
+		{
+			cout << "\n\t\t" << searchItem << "found!";
+		}
+	}
+	return NULL;
+	cin.clear();
+	cin.ignore();
+}
+User* verifyLogin(string username, string password)
+{
+	Admin adm(" ", " ", " ", " ");
+	User * newUser = new User; // make sure to deallocate!!!!!
+	tinyxml2::XMLDocument xmlDoc;
+	xmlDoc.LoadFile("UserDatabase.xml");
+	XMLNode * pRoot = xmlDoc.FirstChild();
+	if (pRoot == nullptr)
+	{
+		errorWarning("Database Failed To Open"); // Need to have a preinitialized database for this to work (use the xml file I included on github)
+		getchar();
+		exit(1);
+	}
+	XMLElement* userElement = xmlDoc.FirstChildElement()->FirstChildElement("User");
+
+	for (tinyxml2::XMLElement* child = userElement; child != NULL; child = child->NextSiblingElement())
+	{
+		if (username == child->Attribute("username"))
+		{
+			if (password == child->Attribute("password"))
+			{
+				adm.createUser(newUser, child->Attribute("id"), child->Attribute("name"), username, password);
+				return newUser;
+			}
+		}
+	}
+	return NULL;
+	cin.clear();
+	cin.ignore();
 }
 #endif
