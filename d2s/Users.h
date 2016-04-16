@@ -15,7 +15,6 @@ void permissionError()
 void errorWarning(char* s)
 {
 	cout << "\n\n\t--Error-- " << s;
-	cin.clear();
 	cin.ignore();
 }
 /*
@@ -132,6 +131,8 @@ public:
 
 	void createUser(User*, string, string, string, string);
 
+	string accessUser(string, User*); // get a users Info
+
 	void changeUserID(User*, string); // change a users ID
 	void changeUserName(User*, string); // change a users Name
 	void changeUserUsername(User*, string); // change a users Username
@@ -142,6 +143,7 @@ public:
 	void setPassword(string password) {itsPassword = password;}
 
 	void storeToDatabase(char*, User*);
+	string Admin::whatAmI(User*);
 };
 
 Admin::Admin(string id, string name, string username, string password)
@@ -188,6 +190,28 @@ void Admin::changeUserPassword(User* pUser, string password)
 	User newUser(pUser->getID(), pUser->getName(), pUser->getUsername(), password);
 	*pUser = newUser;
 }
+string Admin::accessUser(string attribute,User* pUser)
+{
+	Admin admin_access(pUser->getID(), pUser->getName(), pUser->getUsername(), pUser->getPassword());
+	if (attribute == "id" || attribute == "ID")
+	{
+		return admin_access.getID();
+	}
+	else if (attribute == "name" || attribute == "Name")
+	{
+		return admin_access.getName();
+	}
+	else if (attribute == "username" || attribute == "userName")
+	{
+		return admin_access.getUsername();
+	}
+	else if (attribute == "password")
+	{
+		return admin_access.getPassword();
+	}
+	else
+		errorWarning("That is Not an Acceptable Attribute");
+}
 void Admin::storeToDatabase(char * database, User * pUser)
 {
 	tinyxml2::XMLDocument xmlDoc;
@@ -229,5 +253,4 @@ void Admin::storeToDatabase(char * database, User * pUser)
 	}
 	// add options for job listings and exams
 }
-
 #endif

@@ -23,10 +23,10 @@ jobpost:
 
 class Jobpost
 {
-  string jobTitle;
-  string jobDesc;
-  string postTime;
-  string postTime;
+  string job_title;
+  string job_desc;
+  string post_time;
+  string post_time;
   string creator;
 };
 

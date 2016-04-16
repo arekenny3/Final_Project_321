@@ -1,0 +1,316 @@
+#ifndef D2SDATABASE
+#define D2SDATABASE
+#include <iostream>
+#include <string>
+#include <windows.h>
+#include "Users.h"
+#include "tutorial.h"
+#include "tinyxml2.h"
+#include <deque>
+void d2sDatabaseSystem();
+void databaseWelcomeMessage();
+int databaseOptions();
+void databaseWrite();
+void databaseRead();
+void databaseSearch();
+int selectDatabase();
+void makeUser();
+void readUsers();
+int makeUserMenu();
+User* searchUserDatabase(char *, string);
+
+void d2sDatabaseSystem()
+{
+	bool exit = false;
+	int choice = 0;
+
+	databaseWelcomeMessage();
+
+	while (!exit)
+	{
+		while (!(choice = databaseOptions()) || (choice > 4 || choice < 1))
+		{
+			errorWarning("That Was Not One of the Options");
+		}
+		switch (choice)
+		{
+		case 1: databaseWrite();
+			break;
+		case 2: databaseRead();
+			break;
+		case 3: databaseSearch();// do something
+			break;
+		case 4: exit = true;
+			break;
+		default: // do something
+			break;
+		}
+	}
+}
+
+void databaseWelcomeMessage()
+{
+	cout << "\n\n\t\tWelcome to the D2S Database Management System";
+}
+
+int databaseOptions()
+{
+	int x = 0;
+	cout << "\n\n\tDatabase Options:"
+		<< "\n\t1. Write to Database"
+		<< "\n\t2. Read from Database"
+		<< "\n\t3. Search Database"
+		<< "\n\t4. Exit"
+		<< "\n\t: ";
+
+	scanf_s("%d", &x);
+
+	getchar();
+
+	return x;
+}
+
+void databaseWrite()
+{
+	bool exit = false;
+	int choice = 0;
+	while (!exit)
+	{
+		while (!(choice = selectDatabase()) || (choice > 4 || choice < 1))
+		{
+			errorWarning("That Was Not One of the Options");
+		}
+		switch (choice)
+		{
+		case 1: makeUser();
+			break;
+		case 2: // createJobListingMenu();
+			break;
+		case 3: // createExamMenu();
+			break;
+		case 4: exit = true;
+			break;
+		default: // do something
+			break;
+		}
+	}
+}
+void databaseRead()
+{
+	bool exit = false;
+	int choice = 0;
+	while (!exit)
+	{
+		while (!(choice = selectDatabase()) || (choice > 4 || choice < 1))
+		{
+			errorWarning("That Was Not One of the Options");
+		}
+		switch (choice)
+		{
+		case 1: readUsers();
+			break;
+		case 2: // createJobListingMenu();
+			break;
+		case 3: // createExamMenu();
+			break;
+		case 4: exit = true;
+			break;
+		default: // do something
+			break;
+		}
+	}
+}
+void databaseSearch()
+{
+	bool exit = false;
+	int choice = 0;
+	while (!exit)
+	{
+		while (!(choice = selectDatabase()) || (choice > 4 || choice < 1))
+		{
+			errorWarning("That Was Not One of the Options");
+		}
+		switch (choice)
+		{
+		case 1: readUsers();
+			break;
+		case 2: // createJobListingMenu();
+			break;
+		case 3: // createExamMenu();
+			break;
+		case 4: exit = true;
+			break;
+		default: // do something
+			break;
+		}
+	}
+}
+
+int selectDatabase()
+{
+	int x = 0;
+	cout << "\n\n\tSelect a Database:"
+		<< "\n\t1. User Database"
+		<< "\n\t2. Job Listing Database"
+		<< "\n\t3. Exam Database"
+		<< "\n\t4. Exit"
+		<< "\n\t: ";
+
+	scanf_s("%d", &x);
+
+	getchar();
+
+	return x;
+}
+
+void makeUser()
+{
+	Admin adm(" ", " ", " ", " ");
+	User * newUser = new User;
+	string id, name, username, password;
+	bool exit = false;
+	int choice = 0;
+	while (!exit)
+	{
+		cout << "\n\n\tEnter an id: ";
+		getline(cin, id);
+		cout << "\n\tEnter a name: ";
+		getline(cin, name);
+		cout << "\n\tEnter a username: ";
+		getline(cin, username);
+		cout << "\n\tEnter a password: ";
+		getline(cin, password);
+
+		cout << "\n\n\tYou Entered: "
+			<< "\n\t\tID: " << id
+			<< "\n\t\tName: " << name
+			<< "\n\t\tUsername: " << username
+			<< "\n\t\tPassword: " << password
+			<< "\n\n\tIs This Correct(1=T,0=F)?";
+		cin >> choice;
+		if (choice)
+		{
+			adm.createUser(newUser, id, name, username, password);
+			// check if user is already in database in the future
+			adm.storeToDatabase("UserDatabase.xml", newUser);
+			exit = true;
+		}
+		else
+			errorWarning("Admin Typed In User Wrong. Try Again.");
+	}
+
+	delete newUser;
+	newUser = 0;
+
+	/* there is not that much error checking going on here,
+	maybe because we trust the admin to know what he is doing */
+}
+void readUsers()
+{
+	Admin adm(" ", " ", " ", " ");
+	deque<User*> dqUserList;
+	string id, name, username, password;
+	int count = 0;
+	tinyxml2::XMLDocument xmlDoc;
+	xmlDoc.LoadFile("UserDatabase.xml");
+	XMLNode * pRoot = xmlDoc.FirstChild();
+	if (pRoot == nullptr)
+	{
+		errorWarning("Database Failed To Open"); // Need to have a preinitialized database for this to work (use the xml file I included on github)
+		getchar();
+		exit(1);
+	}
+	XMLElement* userElement = xmlDoc.FirstChildElement()->FirstChildElement("User");
+	for (tinyxml2::XMLElement* child = userElement; child != NULL; child = child->NextSiblingElement())
+	{
+		id = child->Attribute("id");
+		name = child->Attribute("name");
+		username = child->Attribute("username");
+		password = child->Attribute("password");
+
+		User* newUser = new User;
+		adm.createUser(newUser, id, name, username, password);
+		dqUserList.push_back(newUser); // make sure to deallocate all of these when you are done
+	}
+	for (deque<User*>::iterator i = dqUserList.begin(); i != dqUserList.end(); ++i)
+	{
+		adm.displayUserData(dqUserList.at(count));
+		cout << '\n';
+		++count;
+	}
+	count = 0;
+	for (deque<User*>::iterator i = dqUserList.begin(); i != dqUserList.end(); ++i)
+	{
+		delete dqUserList.at(count);
+		dqUserList.at(count) = 0;
+		++count;
+	}
+	dqUserList.clear();
+
+	cout << "\n\n\tTotal Users In Database: " << count;
+	cin.clear();
+	cin.ignore();
+}
+User* searchUserDatabase(char * attribute, string searchItem)
+{
+	Admin adm(" ", " ", " ", " ");
+	string id, name, username, password;
+	tinyxml2::XMLDocument xmlDoc;
+	xmlDoc.LoadFile("UserDatabase.xml");
+	XMLNode * pRoot = xmlDoc.FirstChild();
+	if (pRoot == nullptr)
+	{
+		errorWarning("Database Failed To Open"); // Need to have a preinitialized database for this to work (use the xml file I included on github)
+		getchar();
+		exit(1);
+	}
+	XMLElement* userElement = xmlDoc.FirstChildElement()->FirstChildElement("User");
+
+	if (!((attribute == "id") || (attribute == "name") || (attribute == "username") || (attribute == "password")))
+	{
+		errorWarning("That Is Not a Searchable Item");
+		return NULL;
+	}
+	
+	for (tinyxml2::XMLElement* child = userElement; child != NULL; child = child->NextSiblingElement())
+	{
+		if (searchItem == child->Attribute(attribute))
+		{
+			cout << "\n\t\t" << searchItem << "found!";
+		}
+	}
+	return NULL;
+	cin.clear();
+	cin.ignore();
+}
+User* verifyLogin(string username, string password)
+{
+	Admin adm(" ", " ", " ", " ");
+	User * newUser = new User; // make sure to deallocate!!!!!
+	tinyxml2::XMLDocument xmlDoc;
+	xmlDoc.LoadFile("UserDatabase.xml");
+	XMLNode * pRoot = xmlDoc.FirstChild();
+	if (pRoot == nullptr)
+	{
+		errorWarning("Database Failed To Open"); // Need to have a preinitialized database for this to work (use the xml file I included on github)
+		getchar();
+		exit(1);
+	}
+	XMLElement* userElement = xmlDoc.FirstChildElement()->FirstChildElement("User");
+
+	for (tinyxml2::XMLElement* child = userElement; child != NULL; child = child->NextSiblingElement())
+	{
+		if (username == child->Attribute("username"))
+		{
+			if (password == child->Attribute("password"))
+			{
+				adm.createUser(newUser, child->Attribute("id"), child->Attribute("name"), username, password);
+				return newUser;
+			}
+		}
+	}
+	return NULL;
+	cin.clear();
+	cin.ignore();
+}
+#endif
