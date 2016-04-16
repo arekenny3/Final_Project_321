@@ -4,12 +4,11 @@
 #include <windows.h>
 #include "Users.h"
 #include "tutorial.h"
+#include "tinyxml2.h"
 
-/*  
+#pragma warning(disable:4996) // get rid of those nasty warnings
 
-		In order to go forward with this project, a database has to be made to contain the information of users. 
-
-*/
+using namespace tinyxml2;
 
 //Protoyped functions
 void welcome();
@@ -32,35 +31,13 @@ void databaseSearch();
 int main()
 {
 	//admin_tutorial(); // uncomment if you would like to see how the admin class works. Look at the code as well
-
 	//welcome();
-
 	//User* newUser = new User;
-
 	//newUser = getUser(); // go through the login and verification process. SHOULD NOT MOVE PAST THIS POINT IF THEY CAN'T LOGIN
 
-	//d2sDatabaseSystem();
-
-	Admin adm("A12345", "Nick Whetstone", "ratherB_a_wet_stone9696", "my name is nick");
-	Admin adm2;
-	ofstream ofs("saved.txt", ios::out | ios::app);
-
-	ofs << adm; // store the object to file
-	cout << "Object stored\n";
-	ofs.close();
-
-	ifstream ifs("saved.txt", ios::in | ios::app);
-
-	// read the object back in
-	if (ifs >> adm2)
-	{
-		// read was successful therefore s2 is valid
-		cout << adm2 << '\n'; // print s2 to console
-	}
-	cout << "Object read\n";
-
-
-
+	d2sDatabaseSystem();
+	//Admin adm("A12345", "Nick Whetstone", "ratherB_a_wet_stone9696", "my name is nick");
+	
 	cin.clear();
 	cin.ignore();
 	cin.get();
@@ -70,9 +47,6 @@ int main()
 
 void d2sDatabaseSystem()
 {
-	/* 
-			Please note that this is TEMPORARY
-	*/
 	bool exit = false;
 	int choice = 0;
 
@@ -117,13 +91,22 @@ int databaseOptions()
 
 	scanf_s("%d", &x);
 
-	getchar(); // THIS IS NOT A GOOD WAY TO GET USER INPUT - Keep in mind that this is temporary
+	getchar();
 
 	return x;
 }
 
 void databaseWrite()
 {
+	Admin adm;
+	User *newUser = new User; // make sure to deallocate
+	adm.createUser(newUser,"S12123", "Caleb N.", "youresocool", "i like cats");
+
+	adm.storeToUserDatabase(newUser);
+
+	delete newUser;
+	newUser = 0;
+
 }
 void databaseRead()
 {
