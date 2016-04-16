@@ -2,11 +2,11 @@
 #define D2SDATABASE
 #include <iostream>
 #include <string>
-#include <fstream> // needed for the database
 #include <windows.h>
 #include "Users.h"
 #include "tutorial.h"
 #include "tinyxml2.h"
+#include <deque>
 void d2sDatabaseSystem();
 void databaseWelcomeMessage();
 int databaseOptions();
@@ -15,6 +15,7 @@ void databaseRead();
 void databaseSearch();
 int selectDatabase();
 void makeUser();
+void readUsers();
 int makeUserMenu();
 
 void d2sDatabaseSystem()
@@ -34,9 +35,9 @@ void d2sDatabaseSystem()
 		{
 		case 1: databaseWrite();
 			break;
-		case 2: // do something
+		case 2: databaseRead();
 			break;
-		case 3: // do something
+		case 3: databaseSearch();// do something
 			break;
 		case 4: exit = true;
 			break;
@@ -54,7 +55,7 @@ void databaseWelcomeMessage()
 int databaseOptions()
 {
 	int x = 0;
-	cout << "\n\n\tYour Options Are:"
+	cout << "\n\n\tDatabase Options:"
 		<< "\n\t1. Write to Database"
 		<< "\n\t2. Read from Database"
 		<< "\n\t3. Search Database"
@@ -70,7 +71,6 @@ int databaseOptions()
 
 void databaseWrite()
 {
-	Admin adm;
 	bool exit = false;
 	int choice = 0;
 	while (!exit)
@@ -97,7 +97,7 @@ void databaseWrite()
 int selectDatabase()
 {
 	int x = 0;
-	cout << "\n\n\tYour Options Are:"
+	cout << "\n\n\tSelect a Database:"
 		<< "\n\t1. User Database"
 		<< "\n\t2. Job Listing Database"
 		<< "\n\t3. Exam Database"
@@ -137,9 +137,10 @@ void makeUser()
 		cin >> choice;
 		if (choice)
 		{
-			exit = true;
 			adm.createUser(newUser, id, name, username, password);
+			// check if user is already in database in the future
 			adm.storeToDatabase("UserDatabase.xml", newUser);
+			exit = true;
 		}
 		else
 			errorWarning("Admin Typed In User Wrong. Try Again.");
@@ -151,10 +152,95 @@ void makeUser()
 	/* there is not that much error checking going on here,
 	maybe because we trust the admin to know what he is doing */
 }
+void readUsers()
+{
+	Admin adm(" ", " ", " ", " ");
+	deque<User*> dqUserList;
+	string id, name, username, password;
+	int count = 0;
+	tinyxml2::XMLDocument xmlDoc;
+	xmlDoc.LoadFile("UserDatabase.xml");
+	XMLNode * pRoot = xmlDoc.FirstChild();
+	if (pRoot == nullptr)
+	{
+		errorWarning("Database Failed To Open"); // Need to have a preinitialized database for this to work (use the xml file I included on github)
+		getchar();
+		exit(1);
+	}
+	XMLElement* userElement = xmlDoc.FirstChildElement()->FirstChildElement("User");
+	for (tinyxml2::XMLElement* child = userElement; child != NULL; child = child->NextSiblingElement())
+	{
+		id = child->Attribute("id");
+		name = child->Attribute("name");
+		username = child->Attribute("username");
+		password = child->Attribute("password");
+
+		User* newUser = new User;
+		adm.createUser(newUser, id, name, username, password);
+		dqUserList.push_back(newUser); // make sure to deallocate all of these when you are done
+	}
+	for (deque<User*>::iterator i = dqUserList.begin(); i != dqUserList.end(); ++i)
+	{
+		adm.displayUserData(dqUserList.at(count));
+		cout << '\n';
+		++count;
+	//	delete dqUserList.back();
+		//dqUserList.back() = 0;
+	//	dqUserList.pop_back();
+	}
+	count = 0;
+	for (deque<User*>::iterator i = dqUserList.begin(); i != dqUserList.end(); ++i)
+	{
+		delete dqUserList.at(count);
+		dqUserList.at(count) = 0;
+		++count;
+	}
+	dqUserList.clear();
+
+	cout << "\n\n\tTotal Users In Database: " << count;
+	cin.clear();
+	cin.ignore();
+}
 void databaseRead()
 {
+	Admin adm;
+	bool exit = false;
+	int choice = 0;
+	while (!exit)
+	{
+		while (!(choice = selectDatabase()) || (choice > 4 || choice < 1))
+		{
+			errorWarning("That Was Not One of the Options");
+		}
+		switch (choice)
+		{
+		case 1: readUsers();
+			break;
+		case 2: // createJobListingMenu();
+			break;
+		case 3: // createExamMenu();
+			break;
+		case 4: exit = true;
+			break;
+		default: // do something
+			break;
+		}
+	}
 }
 void databaseSearch()
-{
+{	
+	tinyxml2::XMLDocument xmlDoc;
+	xmlDoc.LoadFile("UserDatabase.xml");
+	XMLNode * pRoot = xmlDoc.FirstChild();
+
+	if (pRoot == nullptr)
+	{
+		errorWarning("Database Failed To Open"); // Need to have a preinitialized database for this to work (use the xml file I included on github)
+		getchar();
+		exit(1);
+	}
+
+	XMLElement* findID = xmlDoc.FirstChildElement()->FirstChildElement("User");
+	string id = findID->Attribute("id");
 }
 #endif
