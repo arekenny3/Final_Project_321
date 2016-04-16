@@ -1,5 +1,5 @@
-#ifndef D@SDATABASE
-#define D@SDATABASE
+#ifndef D2SDATABASE
+#define D2SDATABASE
 #include <iostream>
 #include <string>
 #include <fstream> // needed for the database
