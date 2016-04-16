@@ -7,6 +7,7 @@
 
 User* getUser();
 User* login(); // both login and loginVerification might not be 'safe' and login is now platform dependent to windows.. consider changing in future
+string userType(User*);
 
 User* getUser()
 {
@@ -46,6 +47,20 @@ User* login()
 	Mac, Linux, etc.
 	*/
 	return verifyLogin(username,password);
+}
+
+string userType(User* pUser)
+{
+	string type = "";
+	type = pUser->getID();
+	if (type[0] == 'S')
+		return "student";
+	else if (type[0] == 'F')
+		return "faculty";
+	else if (type[0] == 'A')
+		return "admin";
+	else
+		return NULL;
 }
 
 #endif
