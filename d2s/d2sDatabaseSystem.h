@@ -18,6 +18,9 @@ void makeUser();
 void readUsers();
 int makeUserMenu();
 User* searchUserDatabase(char *, string);
+void searchUsers();
+int chooseUserSearchAttribute();
+string chooseUserSearchKey(string);
 
 void d2sDatabaseSystem()
 {
@@ -38,7 +41,7 @@ void d2sDatabaseSystem()
 			break;
 		case 2: databaseRead();
 			break;
-		case 3: databaseSearch();// do something
+		case 3: databaseSearch();
 			break;
 		case 4: exit = true;
 			break;
@@ -132,7 +135,7 @@ void databaseSearch()
 		}
 		switch (choice)
 		{
-		case 1: readUsers();
+		case 1:	searchUsers();
 			break;
 		case 2: // createJobListingMenu();
 			break;
@@ -251,6 +254,73 @@ void readUsers()
 	cin.clear();
 	cin.ignore();
 }
+void searchUsers()
+{
+	int choice = 0;
+	string searchKey = "";
+	char * searchAttribute = "";
+	User* desiredUser = NULL;
+	while (!(choice = chooseUserSearchAttribute()) || (choice > 5 || choice < 1))
+	{
+		errorWarning("That Was Not One of the Options");
+	}
+	if (choice == 1)
+		searchAttribute = "id";
+	if (choice == 2)
+		searchAttribute = "name";
+	if (choice == 3)
+		searchAttribute = "username";
+	if (choice == 4)
+		searchAttribute = "password";
+
+	searchKey = chooseUserSearchKey(searchAttribute);
+
+	desiredUser = searchUserDatabase(searchAttribute, searchKey);
+	Admin adm("", "", "", "");
+	if (desiredUser != NULL)
+		adm.displayUserData(desiredUser);
+	else
+		errorWarning("User Not Found");
+}
+int chooseUserSearchAttribute()
+{
+	int x = 0;
+	cout << "\n\n\tSelect the Key to Search For:"
+		<< "\n\t1. Id"
+		<< "\n\t2. Name"
+		<< "\n\t3. Username"
+		<< "\n\t4. Password"
+		<< "\n\t5. Exit"
+		<< "\n\t: ";
+
+	scanf_s("%d", &x);
+
+	getchar();
+
+	return x;
+
+}
+string chooseUserSearchKey(string searchAttribute)
+{
+	string searchKey = "";
+	bool exit = false;
+	int choice = 0;
+	while (!exit)
+	{
+		cout << "\n\tEnter a " << searchAttribute << ": ";
+		getline(cin, searchKey);
+
+		cout << "\n\n\tYou Entered: "
+			<< "\n\t\t" << searchAttribute << ": " << searchKey
+			<< "\n\n\tIs This Correct(1=T,0=F)?";
+		cin >> choice;
+		if (choice)
+			exit = true;
+		else
+			errorWarning("Admin Typed In User Wrong. Try Again.");
+	}
+	return searchKey;
+}
 User* searchUserDatabase(char * attribute, string searchItem)
 {
 	Admin adm(" ", " ", " ", " ");
@@ -276,7 +346,11 @@ User* searchUserDatabase(char * attribute, string searchItem)
 	{
 		if (searchItem == child->Attribute(attribute))
 		{
-			cout << "\n\t\t" << searchItem << "found!";
+			// User was found in the database, so: make the user from the database and return him!
+			Admin adm("", "", "", "");
+			User * foundUser = new User;
+			adm.createUser(foundUser, child->Attribute("id"), child->Attribute("name"), child->Attribute("username"), child->Attribute("password"));
+			return foundUser;
 		}
 	}
 	return NULL;
