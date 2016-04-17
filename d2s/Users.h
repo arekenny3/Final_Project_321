@@ -15,7 +15,7 @@ void permissionError()
 void errorWarning(char* s)
 {
 	cout << "\n\n\t--Error-- " << s;
-	cin.ignore();
+	cin.clear();
 }
 /*
 Separate these three classes into three separate files. (eventually)
