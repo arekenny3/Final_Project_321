@@ -7,6 +7,9 @@
 #include "tutorial.h"
 #include "tinyxml2.h"
 #include <deque>
+
+using namespace std;
+
 void d2sDatabaseSystem();
 void databaseWelcomeMessage();
 int databaseOptions();
@@ -193,10 +196,20 @@ void makeUser()
 		cin >> choice;
 		if (choice)
 		{
-			adm.createUser(newUser, id, name, username, password);
-			// check if user is already in database in the future
-			adm.storeToDatabase("UserDatabase.xml", newUser);
-			exit = true;
+			char *cId = new char[id.length() + 1];
+			strcpy(cId, id.c_str());
+
+			if ((searchUserDatabase("id", cId)))
+			{
+				errorWarning("User Already in the Database");
+			}
+			else
+			{
+				adm.createUser(newUser, id, name, username, password);
+				adm.storeToDatabase("UserDatabase.xml", newUser);
+				exit = true;
+			}
+			delete[] cId;
 		}
 		else
 			errorWarning("Admin Typed In User Wrong. Try Again.");

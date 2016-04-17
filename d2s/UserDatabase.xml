@@ -4,5 +4,8 @@
     <User id="F12345" name="Professor Hotz" username="2Hotz4u" password="Bringing fear to students brings me joy"/>
     <User id="S94832" name="Sammy Butts" username="dontButtMeOut" password="I get easily offended"/>
     <User id="F23445" name="Mike Kubs" username="kubblyBear" password="i use orange markers"/>
+    <User id="F23445" name="myName" username="myUsername" password="Mypassowrd"/>
+    <User id="F23445" name="Mike Kubs" username="kubblyBear" password="i use orange markers"/>
+    <User id="123" name="123" username="123" password="123"/>
+    <User id="sdf" name="dfs" username="sdf" password="sdf"/>
 </UserDatabase>
-
