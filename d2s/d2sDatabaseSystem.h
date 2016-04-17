@@ -20,10 +20,11 @@ int selectDatabase(string s);
 void makeUser();
 void readUsers();
 int makeUserMenu();
-User* searchUserDatabase(char *, string);
-void searchUsers();
+User* searchUserDatabase(char *, string, bool);
+void searchUsers(bool);
 int chooseUserSearchAttribute();
 string chooseUserSearchKey(string);
+void databaseRemove();
 
 void d2sDatabaseSystem()
 {
@@ -34,7 +35,7 @@ void d2sDatabaseSystem()
 
 	while (!exit)
 	{
-		while (!(choice = databaseOptions()) || (choice > 4 || choice < 1))
+		while (!(choice = databaseOptions()) || (choice > 5 || choice < 1))
 		{
 			errorWarning("That Was Not One of the Options");
 		}
@@ -46,7 +47,9 @@ void d2sDatabaseSystem()
 			break;
 		case 3: databaseSearch();
 			break;
-		case 4: exit = true;
+		case 4: databaseRemove();
+			break;
+		case 5: exit = true;
 			break;
 		default: // do something
 			break;
@@ -66,7 +69,8 @@ int databaseOptions()
 		<< "\n\t1. Write to Database"
 		<< "\n\t2. Read from Database"
 		<< "\n\t3. Search Database"
-		<< "\n\t4. Exit"
+		<< "\n\t4. Remove from Database"
+		<< "\n\t5. Exit"
 		<< "\n\t: ";
 
 	scanf_s("%d", &x);
@@ -138,7 +142,7 @@ void databaseSearch()
 		}
 		switch (choice)
 		{
-		case 1:	searchUsers();
+		case 1:	searchUsers(false);
 			break;
 		case 2: errorWarning("Functionality Not Yet Offered");// createJobListingMenu();
 			break;
@@ -151,7 +155,31 @@ void databaseSearch()
 		}
 	}
 }
-
+void databaseRemove()
+{
+	bool exit = false;
+	int choice = 0;
+	while (!exit)
+	{
+		while (!(choice = selectDatabase("to Remove from")) || (choice > 4 || choice < 1))
+		{
+			errorWarning("That Was Not One of the Options");
+		}
+		switch (choice)
+		{
+		case 1:	searchUsers(true);
+			break;
+		case 2: errorWarning("Functionality Not Yet Offered");// createJobListingMenu();
+			break;
+		case 3: errorWarning("Functionality Not Yet Offered");// createExamMenu();
+			break;
+		case 4: exit = true;
+			break;
+		default: // do something
+			break;
+		}
+	}
+}
 int selectDatabase(string s)
 {
 	int x = 0;
@@ -213,7 +241,7 @@ void makeUser()
 			char *cId = new char[id.length() + 1];
 			strcpy(cId, id.c_str());
 
-			if ((searchUserDatabase("id", cId)))
+			if ((searchUserDatabase("id", cId, false)))//the bool means that we do not want to remove a user
 			{
 				errorWarning("User Already in the Database");
 			}
@@ -284,7 +312,7 @@ void readUsers()
 	cin.clear();
 	cin.ignore();
 }
-void searchUsers()
+void searchUsers(bool remove)
 {
 	int choice = 0;
 	string searchKey = "";
@@ -308,11 +336,11 @@ void searchUsers()
 
 	if (!searchKey.empty())
 	{
-		desiredUser = searchUserDatabase(searchAttribute, searchKey);
+		desiredUser = searchUserDatabase(searchAttribute, searchKey, remove);
 		Admin adm("", "", "", "");
 		if (desiredUser != NULL)
 			adm.displayUserData(desiredUser);
-		else
+		else if (desiredUser->getID() != "fail")
 			errorWarning("User Not Found");
 	}
 }
@@ -364,7 +392,7 @@ string chooseUserSearchKey(string searchAttribute)
 	}
 	return searchKey;
 }
-User* searchUserDatabase(char * attribute, string searchItem)
+User* searchUserDatabase(char * attribute, string searchItem, bool remove) // remove should be set to TRUE if you want to delete a user from the database
 {
 	Admin adm(" ", " ", " ", " ");
 	string id, name, username, password;
@@ -387,13 +415,32 @@ User* searchUserDatabase(char * attribute, string searchItem)
 	
 	for (tinyxml2::XMLElement* child = userElement; child != NULL; child = child->NextSiblingElement())
 	{
-		if (searchItem == child->Attribute(attribute))
+		if (!remove)
 		{
-			// User was found in the database, so: make the user from the database and return him!
-			Admin adm("", "", "", "");
-			User * foundUser = new User;
-			adm.createUser(foundUser, child->Attribute("id"), child->Attribute("name"), child->Attribute("username"), child->Attribute("password"));
-			return foundUser;
+			if (searchItem == child->Attribute(attribute))
+			{
+				// User was found in the database, so: make the user from the database and return him!
+				Admin adm("", "", "", "");
+				User * foundUser = new User;
+				adm.createUser(foundUser, child->Attribute("id"), child->Attribute("name"), child->Attribute("username"), child->Attribute("password"));
+				return foundUser;
+			}
+		}
+		else if (remove)
+		{
+			if (searchItem == child->Attribute(attribute))
+			{
+				// User was found in the database, so: delete him
+				Admin adm("", "", "", "");
+				User * foundUser = new User;
+				foundUser = NULL;
+			//	child = child->NextSiblingElement();
+			//	xmlDoc.DeleteChild(child->PreviousSiblingElement());
+				getchar();
+
+				adm.createUser(foundUser, "fail", "fail", "fail", "fail");
+				return foundUser;
+			}
 		}
 	}
 	return NULL;
