@@ -90,9 +90,9 @@ void databaseWrite()
 		{
 		case 1: makeUser();
 			break;
-		case 2: // createJobListingMenu();
+		case 2: errorWarning("Functionality Not Yet Offered");// createJobListingMenu();
 			break;
-		case 3: // createExamMenu();
+		case 3: errorWarning("Functionality Not Yet Offered"); // createExamMenu();
 			break;
 		case 4: exit = true;
 			break;
@@ -115,9 +115,9 @@ void databaseRead()
 		{
 		case 1: readUsers();
 			break;
-		case 2: // createJobListingMenu();
+		case 2: errorWarning("Functionality Not Yet Offered");// createJobListingMenu();
 			break;
-		case 3: // createExamMenu();
+		case 3: errorWarning("Functionality Not Yet Offered");// createExamMenu();
 			break;
 		case 4: exit = true;
 			break;
@@ -140,9 +140,9 @@ void databaseSearch()
 		{
 		case 1:	searchUsers();
 			break;
-		case 2: // createJobListingMenu();
+		case 2: errorWarning("Functionality Not Yet Offered");// createJobListingMenu();
 			break;
-		case 3: // createExamMenu();
+		case 3: errorWarning("Functionality Not Yet Offered");// createExamMenu();
 			break;
 		case 4: exit = true;
 			break;
@@ -174,27 +174,41 @@ void makeUser()
 	Admin adm(" ", " ", " ", " ");
 	User * newUser = new User;
 	string id, name, username, password;
-	bool exit = false;
+	bool exit = false,
+		correct = false;
 	int choice = 0;
 	while (!exit)
 	{
-		cout << "\n\n\tEnter an id: ";
-		getline(cin, id);
-		cout << "\n\tEnter a name: ";
-		getline(cin, name);
-		cout << "\n\tEnter a username: ";
-		getline(cin, username);
-		cout << "\n\tEnter a password: ";
-		getline(cin, password);
+			cout << "\n\n\tEnter an id: ";
+			getline(cin, id);
+			cout << "\n\tEnter a name: ";
+			getline(cin, name);
+			cout << "\n\tEnter a username: ";
+			getline(cin, username);
+			cout << "\n\tEnter a password: ";
+			getline(cin, password);
+			while (!correct)
+			{
+				correct = false;
+				cout << "\n\n\tYou Entered: "
+					<< "\n\t\tID: " << id
+					<< "\n\t\tName: " << name
+					<< "\n\t\tUsername: " << username
+					<< "\n\t\tPassword: " << password
+					<< "\n\n\tIs This Correct(1=T,0=F)?";
+				cin >> choice;
+				cin.clear();
+				cin.ignore();
+				if (choice < 0 || choice > 2)
+					errorWarning("That was Not an Option");
+				else
+					correct = true;
+			}
 
-		cout << "\n\n\tYou Entered: "
-			<< "\n\t\tID: " << id
-			<< "\n\t\tName: " << name
-			<< "\n\t\tUsername: " << username
-			<< "\n\t\tPassword: " << password
-			<< "\n\n\tIs This Correct(1=T,0=F)?";
-		cin >> choice;
-		if (choice)
+		if (id.empty() || name.empty() || username.empty() || password.empty())
+			choice = 0;
+
+		if (choice == 1)
 		{
 			char *cId = new char[id.length() + 1];
 			strcpy(cId, id.c_str());
@@ -212,7 +226,10 @@ void makeUser()
 			delete[] cId;
 		}
 		else
+		{
 			errorWarning("Admin Typed In User Wrong. Try Again.");
+			correct = false;
+		}
 	}
 
 	delete newUser;
