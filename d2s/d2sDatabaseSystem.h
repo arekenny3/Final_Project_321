@@ -16,7 +16,7 @@ int databaseOptions();
 void databaseWrite();
 void databaseRead();
 void databaseSearch();
-int selectDatabase();
+int selectDatabase(string s);
 void makeUser();
 void readUsers();
 int makeUserMenu();
@@ -82,7 +82,7 @@ void databaseWrite()
 	int choice = 0;
 	while (!exit)
 	{
-		while (!(choice = selectDatabase()) || (choice > 4 || choice < 1))
+		while (!(choice = selectDatabase("to Write to")) || (choice > 4 || choice < 1))
 		{
 			errorWarning("That Was Not One of the Options");
 		}
@@ -107,7 +107,7 @@ void databaseRead()
 	int choice = 0;
 	while (!exit)
 	{
-		while (!(choice = selectDatabase()) || (choice > 4 || choice < 1))
+		while (!(choice = selectDatabase("to Read to")) || (choice > 4 || choice < 1))
 		{
 			errorWarning("That Was Not One of the Options");
 		}
@@ -132,7 +132,7 @@ void databaseSearch()
 	int choice = 0;
 	while (!exit)
 	{
-		while (!(choice = selectDatabase()) || (choice > 4 || choice < 1))
+		while (!(choice = selectDatabase("to Search")) || (choice > 4 || choice < 1))
 		{
 			errorWarning("That Was Not One of the Options");
 		}
@@ -152,10 +152,10 @@ void databaseSearch()
 	}
 }
 
-int selectDatabase()
+int selectDatabase(string s)
 {
 	int x = 0;
-	cout << "\n\n\tSelect a Database:"
+	cout << "\n\n\tSelect a Database " << s << ":"
 		<< "\n\t1. User Database"
 		<< "\n\t2. Job Listing Database"
 		<< "\n\t3. Exam Database"
@@ -273,6 +273,7 @@ void searchUsers()
 	string searchKey = "";
 	char * searchAttribute = "";
 	User* desiredUser = NULL;
+	
 	while (!(choice = chooseUserSearchAttribute()) || (choice > 5 || choice < 1))
 	{
 		errorWarning("That Was Not One of the Options");
@@ -288,12 +289,15 @@ void searchUsers()
 
 	searchKey = chooseUserSearchKey(searchAttribute);
 
-	desiredUser = searchUserDatabase(searchAttribute, searchKey);
-	Admin adm("", "", "", "");
-	if (desiredUser != NULL)
-		adm.displayUserData(desiredUser);
-	else
-		errorWarning("User Not Found");
+	if (!searchKey.empty())
+	{
+		desiredUser = searchUserDatabase(searchAttribute, searchKey);
+		Admin adm("", "", "", "");
+		if (desiredUser != NULL)
+			adm.displayUserData(desiredUser);
+		else
+			errorWarning("User Not Found");
+	}
 }
 int chooseUserSearchAttribute()
 {
@@ -320,17 +324,26 @@ string chooseUserSearchKey(string searchAttribute)
 	int choice = 0;
 	while (!exit)
 	{
+		searchKey = "";
+		choice = 0;
 		cout << "\n\tEnter a " << searchAttribute << ": ";
 		getline(cin, searchKey);
 
 		cout << "\n\n\tYou Entered: "
 			<< "\n\t\t" << searchAttribute << ": " << searchKey
-			<< "\n\n\tIs This Correct(1=T,0=F)?";
+			<< "\n\n\tIs This Correct(1=T,0=F, 2=EXIT)?";
 		cin >> choice;
-		if (choice)
+		cin.clear();
+		cin.ignore();
+		if (choice == 2)
+		{
+			searchKey = "";
+			exit = true;
+		}
+		else if (choice == 1)
 			exit = true;
 		else
-			errorWarning("Admin Typed In User Wrong. Try Again.");
+			errorWarning("You changed Your Mind. Try Again.");
 	}
 	return searchKey;
 }

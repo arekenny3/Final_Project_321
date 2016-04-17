@@ -23,10 +23,10 @@ int main()
 	welcome();
 
 	User* newUser = new User; // Memory Leak? I made news all the way through.
-	newUser = getUser(); // go through the login and verification process. SHOULD NOT MOVE PAST THIS POINT IF THEY CAN'T LOGIN
+	//newUser = getUser(); // go through the login and verification process. SHOULD NOT MOVE PAST THIS POINT IF THEY CAN'T LOGIN
 
 	// this is where calebs menu function will go --- void d2sMainMenu(string type);
-
+	
 	d2sDatabaseSystem();
 
 	cin.clear();
