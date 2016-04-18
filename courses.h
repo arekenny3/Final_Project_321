@@ -20,7 +20,7 @@ class Exam
 	int getDay {return examDay;}
 	int getWeek {return examWeek;}
 	int getHour {return examHour;}
-	int getCoure {return examCourse;}  
+	int getCourse {return examCourse;}  
 	int getDescription {return examDescription;}
 };
 
