@@ -10,27 +10,27 @@ class Exam
 	int examDay;
 	int examWeek;
 	int examHour;
-	int examClass;
+	int examCourse;
 	string examDescription;
   public:
 	Exam() {}
 	Exam(int, int, int, int, int, string);
 	
-	ind getExamID {return examID;}
+	int getExamID {return examID;}
 	int getDay {return examDay;}
 	int getWeek {return examWeek;}
 	int getHour {return examHour;}
-	int getClass {return examClass;}  
+	int getCoure {return examCourse;}  
 	int getDescription {return examDescription;}
 };
 
-Exam::Exam(int ID, int day, int week, int hour, int class, string description)
+Exam::Exam(int ID, int day, int week, int hour, int course, string description)
 {
 	examID = ID;
 	examDay = day;
 	examWeek = week;
 	examHour = hour;
-	examClass = class;
+	examCourse = course;
 	examDescription = description;
 }
 
