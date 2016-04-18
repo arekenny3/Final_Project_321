@@ -1,38 +1,40 @@
 #include <iostream>
 #include <string>
-#include <fstream> // needed for the database
-#include <windows.h>
-#include "Users.h"
-#include "tutorial.h"
-#include "tinyxml2.h"
-#include  "d2sDatabaseSystem.h"
-#include "UserLogin.h"
+#include <fstream>
+#include <windows.h> // platform dependent, consider finding a different solution
+#include "Users.h" // currently contains the classes for the User, Admin, and Student
+#include "tutorial.h" // tutorial of how to use the classes
+#include "tinyxml2.h" // need for the xml database
+#include  "d2sDatabaseSystem.h" // DATABASE SYSTEM FOR ACCESSING DATABASE: ADMIN ACCESS ONLY
+#include "UserLogin.h" // handles the login of the user and checking for correct login with the database (that function is in DB)
 #pragma warning(disable:4996) // get rid of those nasty warnings
 
-using namespace tinyxml2;
-
+using namespace tinyxml2; // makes life easier
+using namespace std; // makes life easier
 //Protoyped functions
 void welcome();
 
-using namespace std;
-void test(User*);
-int fakeMenu();
+void test(User*); // test for now
+int fakeMenu(); // test for now, caleb: just replace these with the actual function names when you're done
 int main()
 {
 	//admin_tutorial(); // uncomment if you would like to see how the admin class works. Look at the code as well
 
 	welcome();
 
-	User* newUser = new User; // Memory Leak? I made news all the way through.
+	User* newUser = new User; // Memory Leak? I made "new User" all the way through. They all point to the same mem address, but,
+					// perhaps deleting one will not delete all? consider implementing differently
 	newUser = getUser(); // go through the login and verification process. SHOULD NOT MOVE PAST THIS POINT IF THEY CAN'T LOGIN
 
 	// this is where calebs menu function will go --- void d2sMainMenu(string type);
 	
-	//d2sDatabaseSystem();
+	//d2sDatabaseSystem(); // this code was such a beauty
 	test(newUser);
 	cin.clear();
+	
 	delete newUser;
 	newUser = 0;
+	
 	cin.clear();
 	cin.ignore();
 	return 0;
