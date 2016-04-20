@@ -87,8 +87,8 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="courses.h" />
     <ClInclude Include="d2sDatabaseSystem.h" />
+    <ClInclude Include="Exam.h" />
     <ClInclude Include="jobpost.h" />
     <ClInclude Include="tinyxml2.h" />
     <ClInclude Include="tutorial.h" />

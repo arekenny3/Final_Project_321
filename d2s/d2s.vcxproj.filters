@@ -34,9 +34,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="courses.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="d2sDatabaseSystem.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -53,6 +50,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Users.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Exam.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

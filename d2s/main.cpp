@@ -7,6 +7,7 @@
 #include "tinyxml2.h" // need for the xml database
 #include  "d2sDatabaseSystem.h" // DATABASE SYSTEM FOR ACCESSING DATABASE: ADMIN ACCESS ONLY
 #include "UserLogin.h" // handles the login of the user and checking for correct login with the database (that function is in DB)
+#include "Exam.h"
 #pragma warning(disable:4996) // get rid of those nasty warnings
 
 using namespace tinyxml2; // makes life easier
@@ -24,7 +25,7 @@ int main()
 
 	User* newUser = new User; // Memory Leak? I made "new User" all the way through. They all point to the same mem address, but,
 					// perhaps deleting one will not delete all? consider implementing differently
-	//newUser = getUser(); // go through the login and verification process. SHOULD NOT MOVE PAST THIS POINT IF THEY CAN'T LOGIN
+	newUser = getUser(); // go through the login and verification process. SHOULD NOT MOVE PAST THIS POINT IF THEY CAN'T LOGIN
 
 	// this is where calebs menu function will go --- void d2sMainMenu(string type);
 	
@@ -32,7 +33,13 @@ int main()
 	//test(newUser);
 	//cin.clear();
 
-	getchar();
+	//Exam * firstExam = new Exam;
+
+	//firstExam->setCourse("ECE 321");
+
+	//firstExam->setDate();
+	//firstExam->setDescription("Chapter 2: Printing to the Screen");
+	//firstExam->setExamID("M00001");
 
 	delete newUser;
 	newUser = 0;
