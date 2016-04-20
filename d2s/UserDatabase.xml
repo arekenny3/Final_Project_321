@@ -1,6 +1,5 @@
 <UserDatabase>
     <User id="S12123" name="Caleb N." username="youresocool" password="i like cats"/>
     <User id="F12345" name="Professor Hotz" username="2Hotz4u" password="Bringing fear to students brings me joy"/>
-    <User id="F23445" name="Mike Kubs" username="kubblyBear" password="i use orange markers"/>
-    <User id="A12345" name="Ryan K." username="rkenny3" password="password1"/>
+    <User id="A23445" name="Mike Kubs" username="kubblyBear" password="i use orange markers"/>
 </UserDatabase>

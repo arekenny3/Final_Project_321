@@ -15,8 +15,14 @@ using namespace std; // makes life easier
 //Protoyped functions
 void welcome();
 
-void test(User*); // test for now
-int fakeMenu(); // test for now, caleb: just replace these with the actual function names when you're done
+void d2sMainMenuStudent();
+int d2sMainMenuStudentOptions();
+void d2sMainMenuFaculty();
+int d2sMainMenuFacultyOptions();
+void d2sMainMenuAdmin();
+int d2sMainMenuAdminOptions();
+
+
 int main()
 {
 	//admin_tutorial(); // uncomment if you would like to see how the admin class works. Look at the code as well
@@ -26,12 +32,13 @@ int main()
 	User* newUser = new User; // Memory Leak? I made "new User" all the way through. They all point to the same mem address, but,
 					// perhaps deleting one will not delete all? consider implementing differently
 	newUser = getUser(); // go through the login and verification process. SHOULD NOT MOVE PAST THIS POINT IF THEY CAN'T LOGIN
-
-	// this is where calebs menu function will go --- void d2sMainMenu(string type);
 	
-	d2sDatabaseSystem(); // this code was such a beauty
-	//test(newUser);
-	//cin.clear();
+	if (userType(newUser) == "student")
+		d2sMainMenuStudent();
+	if (userType(newUser) == "faculty")
+		d2sMainMenuFaculty();
+	if (userType(newUser) == "admin")
+		d2sMainMenuAdmin();
 
 	//Exam * firstExam = new Exam;
 
@@ -73,19 +80,15 @@ void welcome()
 		make some default options that would be available for anyone (potential future guests)
 	
 	*/
-void test(User* myUser)
+void d2sMainMenuStudent()
 {
-	string s = userType(myUser);
-	int count = 1,
-		choice = 0;
+	int choice = 0;
 
 	bool exit = false;
 
-	databaseWelcomeMessage();
-
 	while (!exit)
 	{
-		while (!(choice = fakeMenu()) || (choice > 5 || choice < 1))
+		while (!(choice = d2sMainMenuStudentOptions()) || (choice > 5 || choice < 1))
 		{
 			errorWarning("That Was Not One of the Options");
 		}
@@ -106,31 +109,114 @@ void test(User* myUser)
 		}
 	}
 
-	if (s == "student" || 
-		s == "faculty")
-	{
-		cout << "\n\n\t\t" << count << ": Im an " << s;
-		++count;
-	}
-	if (s == "admin")
-	{
-		cout << "\n\n\t\t" << count << ": Im an " << s;
-		++count;
-	}
-	if (s == "faculty")
-	{
-		cout << "\n\n\t\t" << count << ": Im an " << s;
-		++count;
-	}
 }
-int fakeMenu()
+int d2sMainMenuStudentOptions()
 {
 	int x = 0;
-	cout << "\n\n\tDatabase Options:"
-		<< "\n\t1. Write to Database"
-		<< "\n\t2. Read from Database"
-		<< "\n\t3. Search Database"
-		<< "\n\t4. Remove from Database"
+
+	cout << "\n\n\tAs a Student, you may access:"
+		<< "\n\t1. Attendance"
+		<< "\n\t2. Grades"
+		<< "\n\t3. Job Vacancies"
+		<< "\n\t4. Exam Schedule"
+		<< "\n\t5. Exit"
+		<< "\n\t: ";
+
+	scanf_s("%d", &x);
+
+	getchar();
+
+	return x;
+}
+
+void d2sMainMenuFaculty()
+{
+	int choice = 0;
+
+	bool exit = false;
+
+	while (!exit)
+	{
+		while (!(choice = d2sMainMenuFacultyOptions()) || (choice > 5 || choice < 1))
+		{
+			errorWarning("That Was Not One of the Options");
+		}
+		switch (choice)
+		{
+		case 1: //
+			break;
+		case 2: //
+			break;
+		case 3: //
+			break;
+		case 4: //
+			break;
+		case 5: exit = true;
+			break;
+		default: // do something
+			break;
+		}
+	}
+
+}
+int d2sMainMenuFacultyOptions()
+{
+	int x = 0;
+
+	cout << "\n\n\tAs a Faculty, you may access:"
+		<< "\n\t1. Student Attendance"
+		<< "\n\t2. Student Grades"
+		<< "\n\t3. Job Vacancies"
+		<< "\n\t4. Exam Schedule"
+		<< "\n\t5. Exit"
+		<< "\n\t: ";
+
+	scanf_s("%d", &x);
+
+	getchar();
+
+	return x;
+}
+
+void d2sMainMenuAdmin()
+{
+	int choice = 0;
+
+	bool exit = false;
+
+	while (!exit)
+	{
+		while (!(choice = d2sMainMenuAdminOptions()) || (choice > 5 || choice < 1))
+		{
+			errorWarning("That Was Not One of the Options");
+		}
+		switch (choice)
+		{
+		case 1: d2sDatabaseSystem();
+			break;
+		case 2: //
+			break;
+		case 3: //
+			break;
+		case 4: //
+			break;
+		case 5: exit = true;
+			break;
+		default: // do something
+			break;
+		}
+	}
+
+}
+int d2sMainMenuAdminOptions()
+{
+	int x = 0;
+
+	cout << "\n\n\tAs an Administrator, you may access:"
+		<< "\n\t1. D2S Database System"
+		<< "\n\t2. Student Grades"
+		<< "\n\t3. Job Vacancies"
+		<< "\n\t4. Exam Schedule"
 		<< "\n\t5. Exit"
 		<< "\n\t: ";
 
