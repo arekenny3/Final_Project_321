@@ -208,13 +208,13 @@ void makeUser()
 	while (!exit)
 	{
 			cout << "\n\n\tEnter an id: ";
-			getline(cin, id);
+			getline(std::cin, id);
 			cout << "\n\tEnter a name: ";
-			getline(cin, name);
+			getline(std::cin, name);
 			cout << "\n\tEnter a username: ";
-			getline(cin, username);
+			getline(std::cin, username);
 			cout << "\n\tEnter a password: ";
-			getline(cin, password);
+			getline(std::cin, password);
 			while (!correct)
 			{
 				correct = false;
@@ -224,9 +224,9 @@ void makeUser()
 					<< "\n\t\tUsername: " << username
 					<< "\n\t\tPassword: " << password
 					<< "\n\n\tIs This Correct(1=T,0=F)?";
-				cin >> choice;
-				cin.clear();
-				cin.ignore();
+				std::cin >> choice;
+				std::cin.clear();
+				std::cin.ignore();
 				if (choice < 0 || choice > 2)
 					errorWarning("That was Not an Option");
 				else
@@ -309,8 +309,8 @@ void readUsers()
 	dqUserList.clear();
 
 	cout << "\n\n\tTotal Users In Database: " << count;
-	cin.clear();
-	cin.ignore();
+	std::cin.clear();
+	std::cin.ignore();
 }
 void searchUsers(bool remove)
 {
@@ -338,7 +338,9 @@ void searchUsers(bool remove)
 	{
 		desiredUser = searchUserDatabase(searchAttribute, searchKey, remove);
 		Admin adm("", "", "", "");
-		if (desiredUser != NULL)
+		if (desiredUser->getID() == "fail")
+			cout << "\n\n\t\tUser Deleted";
+		else if (desiredUser != NULL && desiredUser->getID() != "fail")
 			adm.displayUserData(desiredUser);
 		else if (desiredUser->getID() != "fail")
 			errorWarning("User Not Found");
@@ -372,14 +374,14 @@ string chooseUserSearchKey(string searchAttribute)
 		searchKey = "";
 		choice = 0;
 		cout << "\n\tEnter a " << searchAttribute << ": ";
-		getline(cin, searchKey);
+		getline(std::cin, searchKey);
 
 		cout << "\n\n\tYou Entered: "
 			<< "\n\t\t" << searchAttribute << ": " << searchKey
 			<< "\n\n\tIs This Correct(1=T,0=F, 2=EXIT)?";
-		cin >> choice;
-		cin.clear();
-		cin.ignore();
+		std::cin >> choice;
+		std::cin.clear();
+		std::cin.ignore();
 		if (choice == 2)
 		{
 			searchKey = "";
@@ -433,19 +435,21 @@ User* searchUserDatabase(char * attribute, string searchItem, bool remove) // re
 				// User was found in the database, so: delete him
 				Admin adm("", "", "", "");
 				User * foundUser = new User;
-				foundUser = NULL;
-			//	child = child->NextSiblingElement();
-			//	xmlDoc.DeleteChild(child->PreviousSiblingElement());
-				getchar();
-
+				adm.createUser(foundUser, child->Attribute("id"), child->Attribute("name"), child->Attribute("username"), child->Attribute("password"));
+				
+				cout << "\n\n\tUser Being Deleted:";
+				adm.displayUserData(foundUser);
+				xmlDoc.FirstChildElement()->DeleteChild(child);
 				adm.createUser(foundUser, "fail", "fail", "fail", "fail");
+				xmlDoc.SaveFile("UserDatabase.xml");
 				return foundUser;
 			}
 		}
 	}
+
+	std::cin.clear();
+	std::cin.ignore();
 	return NULL;
-	cin.clear();
-	cin.ignore();
 }
 User* verifyLogin(string username, string password)
 {
@@ -474,7 +478,7 @@ User* verifyLogin(string username, string password)
 		}
 	}
 	return NULL;
-	cin.clear();
-	cin.ignore();
+	std::cin.clear();
+	std::cin.ignore();
 }
 #endif

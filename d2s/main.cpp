@@ -24,14 +24,16 @@ int main()
 
 	User* newUser = new User; // Memory Leak? I made "new User" all the way through. They all point to the same mem address, but,
 					// perhaps deleting one will not delete all? consider implementing differently
-	newUser = getUser(); // go through the login and verification process. SHOULD NOT MOVE PAST THIS POINT IF THEY CAN'T LOGIN
+	//newUser = getUser(); // go through the login and verification process. SHOULD NOT MOVE PAST THIS POINT IF THEY CAN'T LOGIN
 
 	// this is where calebs menu function will go --- void d2sMainMenu(string type);
 	
 	d2sDatabaseSystem(); // this code was such a beauty
 	//test(newUser);
-	cin.clear();
-	
+	//cin.clear();
+
+	getchar();
+
 	delete newUser;
 	newUser = 0;
 	
